@@ -2,62 +2,116 @@
     background-color: blue;
 }
 
+/* Estilos básicos */
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, sans-serif;
+  margin: 16px;
+  background: #f5f5f5;
+  color: #222;
+}
+
+h1 {
+  margin-bottom: 12px;
+}
+
+.controls {
   display: flex;
-  flex-direction: column;
+  gap: 8px;
   align-items: center;
-  padding: 20px;
-  background: #f4f4f8;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
 }
 
-h1 { margin-bottom: 8px; }
-
-#controle {
-  margin: 12px 0;
-  display: flex;
-  gap: 12px;
-  align-items: center;
+#resultado, #tentativas {
+  margin-left: 12px;
+  font-weight: 600;
 }
 
-#comecar {
-  padding: 8px 14px;
-  cursor: pointer;
-}
-
-#resultado { font-weight: 600; }
-
-#tabuleiro {
+/* Tabuleiro e cartas */
+.board {
   display: grid;
-  grid-template-columns: repeat(4, 110px);
+  grid-template-columns: repeat(4, 100px);
   gap: 12px;
-  margin-top: 14px;
+  justify-content: start;
 }
 
-.carta {
-  width: 110px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+.card {
+  width: 100px;
+  height: 130px;
+  perspective: 800px;
+  border: none;
+  background: transparent;
+  padding: 0;
   cursor: pointer;
-  user-select: none;
 }
 
-.carta.acertou {
-  outline: 3px solid #4caf50;
-  transform: scale(1.03);
-  transition: transform .12s;
-  cursor: default;
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: transform 0.5s;
+  transform-style: preserve-3d;
 }
 
-@media (max-width: 520px) {
-  #tabuleiro {
-    grid-template-columns: repeat(2, 45vw);
-    gap: 8px;
-  }
-  .carta {
-    width: 45vw;
-    height: 60vw;
+.card .card-front,
+.card .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* frente (visível quando não virada) */
+.card .card-front {
+  background: linear-gradient(180deg,#ffffff,#e6e6e6);
+  color: #333;
+}
+
+/* verso (conteúdo da carta) */
+.card .card-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(180deg,#fffb,#ffe);
+}
+
+/* quando a carta tem a classe flipped, gira o inner */
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* carta matched ganha destaque */
+.card.matched .card-back {
+  box-shadow: 0 0 0 3px rgba(0,200,100,0.25), 0 6px 12px rgba(0,0,0,0.12);
+}
+
+/* Modo escuro (Funcionalidade 1) */
+body.dark-mode {
+  background: #121212;
+  color: #e6e6e6;
+}
+
+body.dark-mode .card .card-front {
+  background: linear-gradient(180deg,#2a2a2a,#1a1a1a);
+  color: #eee;
+}
+
+body.dark-mode .card .card-back {
+  background: linear-gradient(180deg,#1b1b1b,#2c2c2c);
+  color: #fff;
+}
+
+body.dark-mode .controls .btn {
+  filter: none;
+}
+
+/* Responsividade simples */
+@media (max-width: 480px) {
+  .board {
+    grid-template-columns: repeat(2, 100px);
   }
 }
